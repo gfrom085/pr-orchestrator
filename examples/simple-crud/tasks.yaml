@@ -1,0 +1,97 @@
+# Example: Simple CRUD Feature
+# Démonstration d'un cas simple avec peu de dépendances
+
+project:
+  name: "Simple CRUD Example"
+  version: "1.0.0"
+  repo_url: "https://github.com/example/simple-crud"
+  base_branch: "main"
+
+tasks:
+  - id: 1
+    name: "Database Models"
+    description: "Create SQLAlchemy models for Product entity"
+    objective: "Define Product model with basic fields"
+
+    complexity: 30
+    estimated_hours: 2.0
+    priority: 1
+
+    technologies:
+      - Python
+      - SQLAlchemy
+
+    files_to_create:
+      - models/product.py
+      - migrations/001_add_products.py
+
+    patterns_to_follow:
+      - /patterns/database-model.py
+
+    dependencies: []
+
+    todos:
+      - "Create Product model (id, name, price, description)"
+      - "Create migration"
+      - "Write model tests"
+
+  - id: 2
+    name: "API Endpoints"
+    description: "CRUD endpoints for products"
+    objective: "REST API for product management"
+
+    complexity: 40
+    estimated_hours: 3.0
+    priority: 1
+
+    technologies:
+      - Python
+      - FastAPI
+
+    files_to_create:
+      - api/routes/products.py
+
+    patterns_to_follow:
+      - /patterns/fastapi-route.py
+
+    dependencies: [1]
+
+    todos:
+      - "POST /products - create"
+      - "GET /products - list"
+      - "GET /products/{id} - get one"
+      - "PUT /products/{id} - update"
+      - "DELETE /products/{id} - delete"
+      - "Write API tests"
+
+  - id: 3
+    name: "Frontend Components"
+    description: "React components for product management"
+    objective: "UI for CRUD operations"
+
+    complexity: 50
+    estimated_hours: 4.0
+    priority: 2
+
+    technologies:
+      - React
+      - TypeScript
+
+    files_to_create:
+      - components/ProductList.tsx
+      - components/ProductForm.tsx
+
+    patterns_to_follow:
+      - /patterns/react-form.tsx
+
+    dependencies: [2]
+
+    todos:
+      - "ProductList with table"
+      - "ProductForm for create/edit"
+      - "Add validation"
+      - "Component tests"
+
+metadata:
+  generated_by: "Manual"
+  generated_at: "2025-01-07T20:00:00Z"

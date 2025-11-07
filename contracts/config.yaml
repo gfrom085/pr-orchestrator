@@ -1,0 +1,84 @@
+# Schema: .pr-orchestrator.yaml
+# Configuration du PR Orchestrator
+
+# Configuration Git
+git:
+  base_branch: main              # Branche de base (main, master, develop)
+  branch_prefix: pr-orchestrator # Préfixe des branches créées
+  auto_push: true                # Push automatique des branches
+  allow_dirty: false             # Autoriser working tree non-clean
+
+# Configuration GitHub/GitLab/etc
+github:
+  platform: github               # github | gitlab | bitbucket | azure-devops
+  api_base_url: null             # null = auto-detect, ou URL custom
+  draft_by_default: true         # Créer PRs en draft
+  auto_assign: false             # Auto-assigner based on CODEOWNERS
+  require_review: false          # Require review avant merge
+
+# Configuration des labels
+labels:
+  enable: true
+  ready: "ready-to-work"
+  blocked: "blocked"
+  in_progress: "in-progress"
+  completed: "completed"
+  prefix_blocked_by: "blocked-by:"
+  prefix_priority: "priority:"
+  prefix_type: "type:"
+  prefix_complexity: "complexity:"
+
+# Configuration des priming prompts
+prompts:
+  template: default              # default | custom path
+  role_inference: auto           # auto | manual
+  include_context: true          # Inclure contexte complet
+  include_todos: true            # Inclure todo list
+  include_success_criteria: true # Inclure success criteria
+
+# Configuration de monitoring
+monitoring:
+  enable_logging: true
+  log_level: INFO                # DEBUG | INFO | WARNING | ERROR
+  log_file: .pr-orchestrator/logs/orchestrator.log
+
+  enable_dashboard: false        # Web dashboard (future)
+  dashboard_port: 8080
+
+  webhook_url: null              # Webhook pour notifications
+  slack_notifications: false
+  slack_webhook: null
+
+# Configuration de notification
+notifications:
+  on_ready: true                 # Notifier quand task devient ready
+  on_completed: true             # Notifier quand task complétée
+  on_blocked: false              # Notifier quand task bloquée
+  on_failed: true                # Notifier si échec
+
+# Configuration des agents (future)
+agents:
+  max_parallel: 3                # Nombre max d'agents parallèles
+  auto_assignment: false
+  assignment_strategy: priority  # priority | fifo | complexity | random
+
+# Configuration de reprise
+recovery:
+  enable_state_tracking: true
+  state_file: .pr-orchestrator/state.json
+  allow_resume: true             # Permettre de reprendre après interruption
+  skip_completed: true           # Skip tasks déjà complétées
+
+# Configuration de validation
+validation:
+  strict_mode: true              # Mode strict (fail on warnings)
+  check_cycles: true             # Vérifier cycles dans dépendances
+  validate_file_paths: false     # Vérifier que fichiers existent (slow)
+  validate_patterns: false       # Vérifier que patterns existent
+
+# Configuration d'output
+output:
+  verbose: false                 # Output verbeux
+  show_progress: true            # Afficher progress bar
+  colored_output: true           # Utiliser couleurs ANSI
+  summary_report: true           # Afficher rapport final

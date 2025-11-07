@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PR Orchestrator State",
+  "description": "Schema for state.json - tracks orchestration state",
+  "type": "object",
+  "required": ["project", "tasks", "metadata"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": ["name", "repo_url", "base_branch"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "repo_url": {"type": "string"},
+        "base_branch": {"type": "string"}
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "status"],
+        "properties": {
+          "id": {"type": "integer"},
+          "name": {"type": "string"},
+          "branch": {"type": ["string", "null"]},
+          "pr_number": {"type": ["integer", "null"]},
+          "pr_url": {"type": ["string", "null"]},
+          "status": {
+            "type": "string",
+            "enum": ["ready", "blocked", "in_progress", "completed", "failed"]
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {"type": "integer"}
+          },
+          "blocks": {
+            "type": "array",
+            "items": {"type": "integer"}
+          },
+          "created_at": {"type": "string", "format": "date-time"},
+          "started_at": {"type": ["string", "null"], "format": "date-time"},
+          "completed_at": {"type": ["string", "null"], "format": "date-time"},
+          "assigned_to": {"type": ["string", "null"]},
+          "error": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["created_at", "source_file"],
+      "properties": {
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"},
+        "source_file": {"type": "string"},
+        "orchestrator_version": {"type": "string"},
+        "total_tasks": {"type": "integer"},
+        "ready_tasks": {"type": "integer"},
+        "blocked_tasks": {"type": "integer"},
+        "completed_tasks": {"type": "integer"},
+        "failed_tasks": {"type": "integer"}
+      }
+    },
+    "dependency_graph": {
+      "type": "object",
+      "properties": {
+        "has_cycles": {"type": "boolean"},
+        "critical_path": {
+          "type": "array",
+          "items": {"type": "integer"}
+        },
+        "critical_path_hours": {"type": "number"},
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {"type": "integer"}
+          }
+        }
+      }
+    },
+    "estimates": {
+      "type": "object",
+      "properties": {
+        "total_sequential_hours": {"type": "number"},
+        "total_parallel_hours": {"type": "number"},
+        "parallelism_gain_percent": {"type": "number"}
+      }
+    }
+  },
+  "example": {
+    "project": {
+      "name": "My Project",
+      "version": "1.0.0",
+      "repo_url": "https://github.com/user/repo",
+      "base_branch": "main"
+    },
+    "tasks": [
+      {
+        "id": 1,
+        "name": "Database Schema",
+        "branch": "pr-orchestrator/task-1-database-schema",
+        "pr_number": 42,
+        "pr_url": "https://github.com/user/repo/pull/42",
+        "status": "in_progress",
+        "dependencies": [],
+        "blocks": [2, 4],
+        "created_at": "2025-01-07T19:00:00Z",
+        "started_at": "2025-01-07T19:15:00Z",
+        "completed_at": null,
+        "assigned_to": "agent-1",
+        "error": null
+      },
+      {
+        "id": 2,
+        "name": "API Endpoints",
+        "branch": "pr-orchestrator/task-2-api-endpoints",
+        "pr_number": 43,
+        "pr_url": "https://github.com/user/repo/pull/43",
+        "status": "blocked",
+        "dependencies": [1],
+        "blocks": [3, 4],
+        "created_at": "2025-01-07T19:00:00Z",
+        "started_at": null,
+        "completed_at": null,
+        "assigned_to": null,
+        "error": null
+      }
+    ],
+    "metadata": {
+      "created_at": "2025-01-07T19:00:00Z",
+      "updated_at": "2025-01-07T19:15:00Z",
+      "source_file": "tasks.yaml",
+      "orchestrator_version": "1.0.0",
+      "total_tasks": 5,
+      "ready_tasks": 1,
+      "blocked_tasks": 3,
+      "completed_tasks": 0,
+      "failed_tasks": 0
+    },
+    "dependency_graph": {
+      "has_cycles": false,
+      "critical_path": [1, 2, 3, 4],
+      "critical_path_hours": 16.5,
+      "levels": [[1, 5], [2], [3], [4]]
+    },
+    "estimates": {
+      "total_sequential_hours": 18.5,
+      "total_parallel_hours": 16.5,
+      "parallelism_gain_percent": 10.8
+    }
+  }
+}

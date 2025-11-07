@@ -1,0 +1,205 @@
+# Schema: tasks.yaml
+# Input format généré par TaskMaster (ou manuellement)
+
+# Métadonnées du projet
+project:
+  name: "My Project"
+  version: "1.0.0"
+  repo_url: "https://github.com/user/repo"
+  base_branch: "main"
+
+# Liste des tâches
+tasks:
+  - id: 1
+    name: "Database Schema"
+    description: "Create database schema for user management system"
+    objective: "Setup PostgreSQL schema with User, Role, and Permission tables"
+
+    # Estimation (de TaskMaster)
+    complexity: 45              # 0-100
+    estimated_hours: 3.0        # heures
+
+    # Priorité (optionnel)
+    priority: 1                 # 1=highest, 5=lowest
+
+    # Technologies utilisées
+    technologies:
+      - Python
+      - SQLAlchemy
+      - PostgreSQL
+      - Alembic
+
+    # Fichiers à créer
+    files_to_create:
+      - models/user.py
+      - models/role.py
+      - models/permission.py
+      - migrations/001_initial_schema.py
+
+    # Fichiers à modifier (optionnel)
+    files_to_modify:
+      - config/database.py
+
+    # Patterns à suivre (chemins vers patterns du projet)
+    patterns_to_follow:
+      - /patterns/database-model.py
+      - /patterns/migration.py
+
+    # Dépendances (IDs d'autres tâches)
+    dependencies: []
+
+    # Contraintes spécifiques (optionnel)
+    constraints:
+      - "Use UUID for primary keys"
+      - "Add proper indexes for foreign keys"
+      - "Ensure migration is reversible"
+
+    # Critères de succès spécifiques (optionnel)
+    success_criteria:
+      - "Migration applies cleanly"
+      - "Migration rollback works"
+      - "All relationships properly defined"
+
+    # Todo list détaillée (optionnel)
+    todos:
+      - "Create User model with fields: id, email, username, password_hash"
+      - "Create Role model with fields: id, name, permissions"
+      - "Create Permission model with fields: id, name, resource, action"
+      - "Add relationships: User.roles, Role.permissions"
+      - "Create Alembic migration"
+      - "Write tests for models"
+      - "Write tests for migration"
+
+  - id: 2
+    name: "API Endpoints - User Management"
+    description: "Create REST API endpoints for user CRUD operations"
+    objective: "Implement FastAPI endpoints for user management"
+
+    complexity: 60
+    estimated_hours: 4.5
+    priority: 1
+
+    technologies:
+      - Python
+      - FastAPI
+      - Pydantic
+
+    files_to_create:
+      - api/routes/users.py
+      - api/schemas/user.py
+      - tests/test_api_users.py
+
+    files_to_modify:
+      - api/main.py
+
+    patterns_to_follow:
+      - /patterns/fastapi-route.py
+      - /patterns/error-handling.py
+
+    dependencies: [1]  # Dépend de la tâche 1 (Database Schema)
+
+    todos:
+      - "Create UserCreate, UserUpdate, UserResponse Pydantic schemas"
+      - "Implement POST /users endpoint"
+      - "Implement GET /users endpoint (list with pagination)"
+      - "Implement GET /users/{id} endpoint"
+      - "Implement PUT /users/{id} endpoint"
+      - "Implement DELETE /users/{id} endpoint"
+      - "Add authentication middleware"
+      - "Write API tests (pytest)"
+
+  - id: 3
+    name: "Frontend - User Management UI"
+    description: "Create React components for user management"
+    objective: "Build UI for viewing and managing users"
+
+    complexity: 70
+    estimated_hours: 6.0
+    priority: 2
+
+    technologies:
+      - React
+      - TypeScript
+      - TailwindCSS
+      - React Hook Form
+      - Zod
+
+    files_to_create:
+      - components/UserList.tsx
+      - components/UserForm.tsx
+      - components/UserDetail.tsx
+      - hooks/useUsers.ts
+      - schemas/user.schema.ts
+
+    patterns_to_follow:
+      - /patterns/react-form-with-validation.tsx
+      - /patterns/react-table.tsx
+
+    dependencies: [2]  # Dépend de l'API
+
+    todos:
+      - "Create UserList component with table"
+      - "Add pagination to UserList"
+      - "Create UserForm for create/edit"
+      - "Add Zod validation schema"
+      - "Create UserDetail view"
+      - "Add loading and error states"
+      - "Write component tests (Jest/Testing Library)"
+
+  - id: 4
+    name: "Integration Tests"
+    description: "End-to-end tests for user management feature"
+    objective: "Test complete flow from UI to database"
+
+    complexity: 40
+    estimated_hours: 3.0
+    priority: 1
+
+    technologies:
+      - Playwright
+      - Python
+      - pytest
+
+    files_to_create:
+      - tests/e2e/test_user_management.py
+
+    dependencies: [1, 2, 3]  # Dépend de tout
+
+    todos:
+      - "Test user creation flow"
+      - "Test user list and filtering"
+      - "Test user update flow"
+      - "Test user deletion"
+      - "Test error scenarios"
+
+  - id: 5
+    name: "Documentation"
+    description: "API and user documentation"
+    objective: "Document the user management feature"
+
+    complexity: 20
+    estimated_hours: 2.0
+    priority: 3
+
+    technologies:
+      - Markdown
+      - OpenAPI
+
+    files_to_create:
+      - docs/api/user-management.md
+      - docs/user-guide/managing-users.md
+
+    dependencies: []  # Indépendant, peut commencer tout de suite
+
+    todos:
+      - "Document API endpoints"
+      - "Add request/response examples"
+      - "Write user guide with screenshots"
+      - "Update OpenAPI spec"
+
+# Métadonnées de génération (optionnel)
+metadata:
+  generated_by: "TaskMaster"
+  generated_at: "2025-01-07T19:00:00Z"
+  source: "TRD-2025-001-UserManagement.md"
+  analysis_version: "2.0"

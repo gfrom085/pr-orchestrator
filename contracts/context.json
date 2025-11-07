@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Task Context",
+  "description": "Schema for context.json - detailed context for each task",
+  "type": "object",
+  "required": ["task_id", "name", "description", "priming_prompt"],
+  "properties": {
+    "task_id": {
+      "type": "integer",
+      "description": "Unique task identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Task name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed task description"
+    },
+    "objective": {
+      "type": "string",
+      "description": "Clear objective statement"
+    },
+    "priming_prompt": {
+      "type": "string",
+      "description": "Generated priming prompt for agents"
+    },
+    "complexity": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Complexity score from TaskMaster"
+    },
+    "estimated_hours": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Estimated time in hours"
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Priority level (1=highest)"
+    },
+    "technologies": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "List of technologies used"
+    },
+    "files_to_create": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Files to be created"
+    },
+    "files_to_modify": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Existing files to modify"
+    },
+    "patterns_to_follow": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Code patterns/templates to follow"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {"type": "integer"},
+      "description": "Task IDs this task depends on"
+    },
+    "blocks": {
+      "type": "array",
+      "items": {"type": "integer"},
+      "description": "Task IDs that depend on this task"
+    },
+    "constraints": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Implementation constraints"
+    },
+    "success_criteria": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Criteria for task completion"
+    },
+    "todos": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Detailed todo checklist"
+    },
+    "references": {
+      "type": "object",
+      "properties": {
+        "pr_url": {"type": "string"},
+        "branch": {"type": "string"},
+        "related_docs": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "dependency_tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "integer"},
+              "name": {"type": "string"},
+              "pr_url": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "task_id": 1,
+    "name": "Database Schema",
+    "description": "Create database schema for user management system with User, Role, and Permission tables",
+    "objective": "Setup PostgreSQL schema with proper relationships and indexes",
+    "priming_prompt": "ROLE: Expert Python/SQLAlchemy Developer\nTASK: Setup PostgreSQL schema for user management\n\nCONTEXT:\n  - Files to create: models/user.py, models/role.py, models/permission.py\n  - Technologies: Python, SQLAlchemy, PostgreSQL, Alembic\n  - Patterns: /patterns/database-model.py\n\nCONSTRAINTS:\n  - Use UUID for primary keys\n  - Test coverage > 90%\n  - Migration must be reversible\n\nSUCCESS CRITERIA:\n  - All tests pass\n  - Migration applies and rollbacks cleanly\n  - Proper indexes defined",
+    "complexity": 45,
+    "estimated_hours": 3.0,
+    "priority": 1,
+    "technologies": ["Python", "SQLAlchemy", "PostgreSQL", "Alembic"],
+    "files_to_create": [
+      "models/user.py",
+      "models/role.py",
+      "models/permission.py",
+      "migrations/001_initial_schema.py"
+    ],
+    "files_to_modify": ["config/database.py"],
+    "patterns_to_follow": [
+      "/patterns/database-model.py",
+      "/patterns/migration.py"
+    ],
+    "dependencies": [],
+    "blocks": [2, 4],
+    "constraints": [
+      "Use UUID for primary keys",
+      "Add proper indexes for foreign keys",
+      "Ensure migration is reversible",
+      "Follow PEP 8 style guide",
+      "Use type hints (mypy --strict)",
+      "Test coverage > 90%"
+    ],
+    "success_criteria": [
+      "All tests pass (pytest)",
+      "mypy --strict passes with no errors",
+      "Migration applies cleanly",
+      "Migration rollback works",
+      "All relationships properly defined",
+      "Indexes properly created"
+    ],
+    "todos": [
+      "Create User model with fields: id, email, username, password_hash",
+      "Create Role model with fields: id, name, permissions",
+      "Create Permission model with fields: id, name, resource, action",
+      "Add relationships: User.roles, Role.permissions",
+      "Create Alembic migration",
+      "Write unit tests for models",
+      "Write integration tests for migration"
+    ],
+    "references": {
+      "pr_url": "https://github.com/user/repo/pull/42",
+      "branch": "pr-orchestrator/task-1-database-schema",
+      "related_docs": [
+        "docs/database-design.md",
+        "patterns/database-model.py"
+      ],
+      "dependency_tasks": []
+    }
+  }
+}
